@@ -88,6 +88,7 @@ public class CPSC112_Assignment3 {
 	//		  if (input.charAt(i)) == mySecret.charAt(j)) {
 			  if (Integer.parseInt(input.substring(i, i+1)) == Integer.parseInt(mySecret.substring(j, j+1))) {
 				  correctDigits++;
+				  System.out.print(Integer.parseInt(input.substring(i, i+1)));
 			  }
 		  }
 	  }
