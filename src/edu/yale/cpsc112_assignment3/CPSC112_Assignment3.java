@@ -5,7 +5,7 @@ import java.util.Random;
 public class CPSC112_Assignment3 {
 
   public static String mySecret = "";
-  public static boolean DEBUG = false;
+  public static boolean DEBUG = true;
   public static Random r = new Random();
   public static int correctDigits = 0; 
   public static int correctSpots = 0; 
@@ -14,14 +14,13 @@ public class CPSC112_Assignment3 {
   public static boolean iJustLied = false; 
 
   public static void main(String[] args) {
-    makeMySecret();
-    isGameOver("1234");
-    isGameOver("4321");
-    isGameOver("2567");
-    isGameOver("1432"); 
-    isGameOver("1235");
-    isGameOver("1236");
-  }
+	    makeMySecret();
+	    isGameOver("1234");
+	    isGameOver("4321");
+	    isGameOver("2567");
+	    isGameOver("1432");
+	  }
+
 
   public static void makeMySecret() {
      // Part 1 code goes here (please leave the next few lines at the end of the makeMySecret method)
@@ -115,18 +114,21 @@ public class CPSC112_Assignment3 {
 
 
   public static boolean isGameOver(String input) {
-		 
-	  if (Integer.parseInt(input) < highestGuess) {
+		
+	  int inputAsInteger = Integer.parseInt(input);
+	  int secretAsInteger = Integer.parseInt(mySecret);
+	  
+	  if (inputAsInteger < highestGuess) {
 		  if (exceptionsRemaining > 0) {
 			  exceptionsRemaining--;
 		  }
 		  System.out.println("Your guess was lower than allowed. You have " + exceptionsRemaining + " exceptions remaining.");
 	  }
-	  else if (Integer.parseInt(input) > highestGuess) {
-		  highestGuess = Integer.parseInt(input); 
+	  else if (inputAsInteger > highestGuess) {
+		  highestGuess = inputAsInteger; 
 	  }
 	  
-	  if (exceptionsRemaining == 0 && Integer.parseInt(input) > Integer.parseInt(mySecret)) {
+	  if (exceptionsRemaining == 0 && inputAsInteger > secretAsInteger) {
 		  System.out.println("You're out of exceptions and you've guessed too high! The secret was " + mySecret + ".");
 		  return true;
 	  }
@@ -152,7 +154,7 @@ public class CPSC112_Assignment3 {
 			  }
 		  }
 		  
-		  if (chanceOfLying < 66 || iJustLied == true) {		
+		  if (chanceOfLying < 66  || iJustLied == true) {		
 			 System.out.print("Guess: " + input + "; ");
 		     System.out.println("Result: " + correctDigits + "," + correctSpots);
 		     System.out.println(); 
@@ -166,7 +168,8 @@ public class CPSC112_Assignment3 {
 			  iJustLied = true;
 		  } 
 		  
-		  if (correctDigits == 4 && correctSpots == 4) {
+		  //this shows when the player wins :) 
+		  if (inputAsInteger == secretAsInteger) {
 			  System.out.println("You won!");
 			  correctDigits = 0;
 			  correctSpots = 0;
@@ -185,5 +188,35 @@ public class CPSC112_Assignment3 {
 	  return true;
   }
 
+  public static void makeALie () {
+		
+		int bigFatLieOne = 0; 
+		int bigFatLieTwo = 0;
+		
+		int fiftyFiftyChance = 0; 
+		fiftyFiftyChance = r.nextInt(100);
+		
+		if (fiftyFiftyChance < 50 && correctSpots < 4) {
+			bigFatLieOne = r.nextInt(4) + 1;
+			while (bigFatLieOne == correctDigits) {
+				bigFatLieOne = r.nextInt(4) + 1; 
+				while (correctSpots > bigFatLieOne) {
+					bigFatLieOne = r.nextInt(4) + 1; 
+				}
+			}
+			correctDigits = bigFatLieOne; 
+		}
+		else {
+			bigFatLieTwo = r.nextInt(4) + 1;
+			while (bigFatLieTwo == correctSpots || bigFatLieTwo > bigFatLieOne) {
+				bigFatLieTwo = r.nextInt(4) + 1;
+			}
+			while (correctDigits == 4) {
+				bigFatLieTwo = r.nextInt(3);
+			}
+			correctSpots = bigFatLieTwo; 
+		}
+		
+	}
 
 }
