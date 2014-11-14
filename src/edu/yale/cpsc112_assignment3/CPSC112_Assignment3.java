@@ -15,8 +15,6 @@ public class CPSC112_Assignment3 {
 
   public static void main(String[] args) {
     makeMySecret();
-    isGuessValid("1278");
-    isGuessValid("12735");
     isGameOver("1234");
     isGameOver("4321");
     isGameOver("2567");
@@ -55,7 +53,6 @@ public class CPSC112_Assignment3 {
 		    }
 
   }
-
 
   public static boolean isGuessValid(String input) {
     // Part 2 code goes here
@@ -118,8 +115,75 @@ public class CPSC112_Assignment3 {
 
 
   public static boolean isGameOver(String input) {
-	 
+		 
+	  if (Integer.parseInt(input) < highestGuess) {
+		  if (exceptionsRemaining > 0) {
+			  exceptionsRemaining--;
+		  }
+		  System.out.println("Your guess was lower than allowed. You have " + exceptionsRemaining + " exceptions remaining.");
+	  }
+	  else if (Integer.parseInt(input) > highestGuess) {
+		  highestGuess = Integer.parseInt(input); 
+	  }
 	  
+	  if (exceptionsRemaining == 0 && Integer.parseInt(input) > Integer.parseInt(mySecret)) {
+		  System.out.println("You're out of exceptions and you've guessed too high! The secret was " + mySecret + ".");
+		  return true;
+	  }
+	  
+	  if(isGuessValid(input) == true){
+		  
+		  //run the lie 33% of the time
+		  int chanceOfLying = r.nextInt(100);
+		  
+		  //this part counts the number of correct digits
+		  for (int i = 0; i < 4; i++) {
+			  for (int j = 0; j < 4; j++) {
+				  if (Integer.parseInt(input.substring(i, i+1)) == Integer.parseInt(mySecret.substring(j, j+1))) {
+					  correctDigits++;
+				  }
+			  } 
+		  }
+		  
+		  //this part counts the number of digits in the right spot 
+		  for (int i = 0; i < 4; i++) {
+			  if (input.charAt(i) == mySecret.charAt(i)) {
+				  correctSpots++; 
+			  }
+		  }
+		  
+		  if (chanceOfLying < 66 || iJustLied == true) {		
+			 System.out.print("Guess: " + input + "; ");
+		     System.out.println("Result: " + correctDigits + "," + correctSpots);
+		     System.out.println(); 
+		     iJustLied = false; 
+		  }
+		  else {
+			  makeALie();
+			  System.out.print("Guess: " + input + "; ");
+			  System.out.println("Result: " + correctDigits + "," + correctSpots);
+			  System.out.println();
+			  iJustLied = true;
+		  } 
+		  
+		  if (correctDigits == 4 && correctSpots == 4) {
+			  System.out.println("You won!");
+			  correctDigits = 0;
+			  correctSpots = 0;
+			  return false;
+		  }
+		  else {
+			  correctDigits = 0;
+			  correctSpots = 0;
+			  return true;
+		  }
+		  
+	  }
+
+	  correctDigits = 0;
+	  correctSpots = 0;
+	  return true;
   }
+
 
 }
